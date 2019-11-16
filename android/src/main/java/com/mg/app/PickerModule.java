@@ -63,6 +63,7 @@ class PickerModule extends ReactContextBaseJavaModule {
     private int height = 0;
     private int maxSize = 9;
     private int compressQuality = -1;
+    private int videoQuality = 1;
     private boolean returnAfterShot = false;
     private boolean multipleShot  = false;
     private int spanCount = 3;
@@ -94,6 +95,7 @@ class PickerModule extends ReactContextBaseJavaModule {
         cropping = options.hasKey("cropping") ? options.getBoolean("cropping") : cropping;
         includeBase64 = options.hasKey("includeBase64") && options.getBoolean("includeBase64");
         compressQuality = options.hasKey("compressQuality") ? options.getInt("compressQuality") : compressQuality;
+        videoQuality = options.hasKey("videoQuality") ? options.getInt("videoQuality") : videoQuality;
         title = options.hasKey("title") ? options.getString("title") : title;
         returnAfterShot = options.hasKey("returnAfterShot") && options.getBoolean("returnAfterShot");
         multipleShot = options.hasKey("multipleShot") && options.getBoolean("multipleShot");
@@ -169,6 +171,7 @@ class PickerModule extends ReactContextBaseJavaModule {
         BitmapFactory.Options options = validateImage(compressedImagePath);
 
         image.putString("path", "file://" + compressedImagePath);
+        image.putString("originalPath", "file://" + path);
         image.putInt("width", options.outWidth);
         image.putInt("height", options.outHeight);
         image.putString("mime", options.outMimeType);
@@ -246,6 +249,7 @@ class PickerModule extends ReactContextBaseJavaModule {
 
         RxGalleryFinal rxGalleryFinal =  RxGalleryFinal.with(activity);
         rxGalleryFinal.spanCount(spanCount);
+        rxGalleryFinal.setVideoQuality(videoQuality);
         if(openCameraOnStart){
             rxGalleryFinal.openCameraOnStart();
         }else if(!isCamera){
@@ -388,6 +392,7 @@ class PickerModule extends ReactContextBaseJavaModule {
             mPickerPromise = promise;
 
             RxGalleryFinal rxGalleryFinal =  RxGalleryFinal.with(activity);
+            rxGalleryFinal.setVideoQuality(videoQuality);
             if(compressQuality>0){
                 rxGalleryFinal.cropropCompressionQuality(compressQuality);
             }
